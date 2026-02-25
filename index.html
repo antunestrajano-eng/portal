@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portal do Cliente – Confiance Energy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Reset & Base ─────────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary:          hsl(210,100%,20%);   /* #002966 */
+      --primary-90:       hsl(210,100%,18%);
+      --blue-600:         #2563eb;
+      --blue-900:         #1e3a8a;
+      --accent:           hsl(45,100%,50%);    /* #ffbf00 */
+      --accent-ring:      hsla(45,100%,50%,.3);
+      --background:       hsl(210,20%,98%);    /* #f6f8fc */
+      --foreground:       hsl(222,47%,11%);
+      --muted-fg:         hsl(215,16%,47%);    /* #64748b */
+      --border:           hsl(214,32%,91%);    /* #e2e8f0 */
+      --secondary-bg:     hsl(210,40%,96%);
+      --green-600:        #16a34a;
+      --green-700:        #15803d;
+      --radius:           0.75rem;
+    }
+
+    html { -webkit-font-smoothing: antialiased; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background-color: var(--background);
+      background-image:
+        radial-gradient(circle at 100% 0%, hsla(45,100%,50%,.05) 0%, transparent 25%),
+        radial-gradient(circle at 0% 100%, hsla(210,100%,20%,.05) 0%, transparent 25%);
+      background-attachment: fixed;
+      color: var(--foreground);
+      min-height: 100vh;
+    }
+
+    h1,h2,h3,h4,h5,h6 {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      color: var(--primary);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════════
+       LOGIN PAGE
+    ══════════════════════════════════════════════════════════════════════════ */
+    #login-page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      /* Começa branco puro no topo (onde a logo está) → logo PNG branca = invisível */
+      background: linear-gradient(180deg, #ffffff 0%, #eef4ff 100%);
+    }
+
+    .login-wrap { width: 100%; max-width: 448px; animation: fadeUp .5s ease both; }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:none; } }
+
+    /* Logo above card */
+    .login-logo {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+    .login-logo img {
+      height: 64px;
+      width: auto;
+      object-fit: contain;
+      /* Sem blend mode — branco do PNG some no fundo branco puro do topo */
+    }
+    .login-logo-text {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    /* Card — shadow-2xl sem borda, igual ao React */
+    .login-card {
+      border-radius: var(--radius);
+      background: #fff;
+      box-shadow:
+        0 25px 50px -12px rgba(0,0,0,.25),
+        0 0 0 0 transparent; /* sem border */
+      overflow: hidden;
+      border: none;
+      outline: none;
+    }
+
+    /* Gradient top bar */
+    .card-bar {
+      height: 8px;
+      background: linear-gradient(90deg, var(--primary), var(--blue-600), var(--accent));
+    }
+
+    .login-card-header {
+      padding: 1.5rem 1.5rem .5rem;
+      text-align: center;
+    }
+
+    .login-card-title {
+      font-size: 1.5rem;
+      color: var(--primary);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      margin-bottom: .25rem;
+    }
+
+    .login-card-desc {
+      font-size: .875rem;
+      color: var(--muted-fg);
+    }
+
+    .login-card-content { padding: 1.5rem; }
+
+    .field-label {
+      display: block;
+      font-size: .875rem;
+      font-weight: 500;
+      color: hsl(222,47%,11%);
+      margin-bottom: .5rem;
+      margin-left: .25rem;
+    }
+
+    .cpf-input {
+      width: 100%;
+      height: 3rem;
+      padding: 0 .75rem;
+      border: 2px solid var(--border);
+      border-radius: calc(var(--radius) - 2px);
+      font-size: 1.125rem;
+      font-family: ui-monospace, 'Courier New', monospace;
+      text-align: center;
+      letter-spacing: .15em;
+      color: var(--foreground);
+      background: #fff;
+      outline: none;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .cpf-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px hsla(210,100%,20%,.1);
+    }
+    .cpf-input::placeholder { color: hsl(215,16%,70%); }
+
+    .btn-login {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+      width: 100%;
+      height: 3rem;
+      margin-top: 1.5rem;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: calc(var(--radius) - 2px);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 10px 15px -3px hsla(210,100%,20%,.25);
+      transition: background .15s, transform .15s;
+    }
+    .btn-login:hover:not(:disabled) {
+      background: var(--primary-90);
+      transform: translateY(-1px);
+    }
+    /* Disabled mantém cor primária, só perde opacidade — igual ao React */
+    .btn-login:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+      transform: none;
+      background: var(--primary); /* força manter azul, não virar cinza do browser */
+    }
+
+    .login-card-footer {
+      padding: 1rem 1.5rem;
+      background: var(--secondary-bg);
+      border-top: 1px solid var(--border);
+      text-align: center;
+      font-size: .75rem;
+      color: var(--muted-fg);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════════
+       DASHBOARD
+    ══════════════════════════════════════════════════════════════════════════ */
+    #dashboard-page { display: none; min-height: 100vh; background: hsla(0,0%,98%,.3); }
+
+    /* ── Header ── */
+    .dash-header {
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .dash-header-inner {
+      max-width: 80rem;
+      margin: 0 auto;
+      padding: 0 1rem;
+      height: 4rem; /* 64px */
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    @media (min-width: 640px) {
+      .dash-header-inner { height: 5rem; padding: 0 1.5rem; }
+    }
+    @media (min-width: 1024px) {
+      .dash-header-inner { padding: 0 2rem; }
+    }
+
+    .header-left { display: flex; align-items: center; gap: 1rem; }
+    .header-logo-img {
+      height: 2rem;
+      width: auto;
+      /* Header é branco #fff — mesmo branco do PNG, retângulo invisível */
+    }
+    @media (min-width: 640px) { .header-logo-img { height: 2.5rem; } }
+
+    .header-divider {
+      display: none;
+      width: 1px;
+      height: 2rem;
+      background: var(--border);
+    }
+    @media (min-width: 640px) { .header-divider { display: block; } }
+
+    .header-portal-title {
+      display: none;
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: var(--primary);
+      font-family: 'DM Sans', sans-serif;
+    }
+    @media (min-width: 640px) { .header-portal-title { display: block; } }
+
+    .header-right { display: flex; align-items: center; gap: 1rem; }
+
+    .header-cname {
+      display: none;
+      font-size: .875rem;
+      font-weight: 700;
+      color: var(--foreground);
+    }
+    @media (min-width: 768px) { .header-cname { display: block; } }
+
+    .btn-logout {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      background: transparent;
+      border: none;
+      color: var(--muted-fg);
+      font-family: 'DM Sans', sans-serif;
+      font-size: .875rem;
+      cursor: pointer;
+      padding: .4rem .6rem;
+      border-radius: .5rem;
+      transition: background .15s, color .15s;
+    }
+    .btn-logout:hover { background: hsl(0,84%,95%); color: hsl(0,84%,60%); }
+
+    /* ── Main ── */
+    .dash-main {
+      max-width: 80rem;
+      margin: 0 auto;
+      padding: 1rem .75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    @media (min-width: 640px) { .dash-main { padding: 2rem 1.5rem; gap: 2rem; } }
+    @media (min-width: 1024px) { .dash-main { padding: 2rem; } }
+
+    /* ── Welcome grid ── */
+    .welcome-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+    @media (min-width: 640px) { .welcome-grid { gap: 1.5rem; } }
+    @media (min-width: 1024px) { .welcome-grid { grid-template-columns: 2fr 1fr; } }
+
+    /* Welcome hero card */
+    .welcome-hero {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--blue-900) 100%);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 20px 25px -5px hsla(210,100%,20%,.2);
+    }
+    @media (min-width: 640px) {
+      .welcome-hero { border-radius: 1rem; padding: 2rem; }
+    }
+
+    .welcome-hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -8%;
+      width: 16rem;
+      height: 16rem;
+      background: rgba(255,255,255,.05);
+      border-radius: 50%;
+      filter: blur(3rem);
+      pointer-events: none;
+    }
+
+    .welcome-name {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: .5rem;
+      position: relative;
+      z-index: 1;
+    }
+    @media (min-width: 640px) { .welcome-name { font-size: 1.875rem; } }
+
+    .welcome-sub {
+      font-size: .875rem;
+      color: rgba(255,255,255,.9);
+      position: relative;
+      z-index: 1;
+      max-width: 32rem;
+    }
+    @media (min-width: 640px) { .welcome-sub { font-size: 1rem; } }
+
+    /* Actions card */
+    .actions-card {
+      background: #fff;
+      border-radius: var(--radius);
+      border: 1px solid hsla(214,32%,91%,.5);
+      padding: 1rem 1.25rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,.06);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: .75rem;
+    }
+    @media (min-width: 640px) {
+      .actions-card { border-radius: 1rem; padding: 1.5rem; gap: 1rem; }
+    }
+
+    .actions-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-weight: 700;
+      color: var(--primary);
+      font-size: .875rem;
+    }
+    @media (min-width: 640px) { .actions-title { font-size: 1rem; } }
+
+    .btn-contract {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      padding: .5rem .75rem;
+      border: 2px dashed var(--border);
+      border-radius: calc(var(--radius) - 2px);
+      background: transparent;
+      cursor: pointer;
+      transition: border-color .15s, background .15s;
+      width: 100%;
+      text-align: left;
+    }
+    @media (min-width: 640px) { .btn-contract { padding: .75rem 1rem; } }
+    .btn-contract:hover { border-color: var(--primary); background: hsla(210,100%,20%,.04); }
+    .btn-contract:hover .btn-contract-icon { color: var(--primary); }
+    .btn-contract-icon { color: var(--muted-fg); flex-shrink: 0; }
+    .btn-contract-label { font-weight: 600; font-size: .875rem; color: var(--foreground); display: block; }
+    .btn-contract-sub   { font-size: .75rem; color: var(--muted-fg); }
+
+    /* ── Section card ── */
+    .section-card {
+      background: #fff;
+      border-radius: var(--radius);
+      border: 1px solid hsla(214,32%,91%,.5);
+      padding: 1rem 1.25rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,.06);
+    }
+    @media (min-width: 640px) {
+      .section-card { border-radius: 1rem; padding: 2rem; }
+    }
+
+    .section-title { font-size: 1rem; color: var(--primary); margin-bottom: .25rem; }
+    @media (min-width: 640px) { .section-title { font-size: 1.25rem; } }
+
+    .section-sub {
+      font-size: .875rem;
+      color: var(--muted-fg);
+      margin-bottom: 1.25rem;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 400;
+    }
+    @media (min-width: 640px) { .section-sub { margin-bottom: 2rem; } }
+
+    /* ── Stepper (Desktop horizontal) ── */
+    .stepper-desktop {
+      display: none;
+      position: relative;
+      padding: 2rem 1rem 0;
+    }
+    @media (min-width: 1024px) { .stepper-desktop { display: flex; justify-content: space-between; align-items: flex-start; } }
+
+    .stepper-track {
+      position: absolute;
+      top: calc(2rem + 24px); /* padding-top + half of 48px circle = center */
+      left: calc(1rem + 24px);
+      right: calc(1rem + 24px);
+      height: 4px;
+      background: var(--secondary-bg);
+      border-radius: 4px;
+      transform: translateY(-50%);
+    }
+
+    .stepper-track-fill {
+      height: 100%;
+      background: var(--primary);
+      border-radius: 4px;
+      transition: width 1s ease;
+    }
+
+    .step-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .75rem;
+      flex: 1;
+      position: relative;
+      z-index: 1;
+    }
+
+    .step-circle {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 4px solid var(--border);
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: hsl(215,16%,80%);
+      transition: all .3s;
+      flex-shrink: 0;
+    }
+    .step-circle.done {
+      border-color: var(--primary);
+      background: var(--primary);
+      color: #fff;
+    }
+    .step-circle.active {
+      border-color: var(--accent);
+      background: #fff;
+      color: var(--primary);
+      box-shadow: 0 0 0 4px var(--accent-ring);
+    }
+
+    .step-lbl {
+      font-size: .75rem;
+      font-weight: 600;
+      color: var(--muted-fg);
+      text-align: center;
+      font-family: 'DM Sans', sans-serif;
+      max-width: 80px;
+      position: relative;
+    }
+    .step-lbl.active { color: var(--primary); font-weight: 700; }
+
+    .step-col { cursor: default; }
+    .step-tooltip {
+      display: none;
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 12px rgba(0,0,0,.1);
+      border-radius: 6px;
+      padding: .35rem .65rem;
+      font-size: .72rem;
+      font-weight: 500;
+      color: var(--primary);
+      white-space: nowrap;
+      z-index: 20;
+      pointer-events: none;
+    }
+    .step-col:hover .step-tooltip { display: block; }
+
+    /* ── Stepper (Mobile vertical) ── */
+    .stepper-mobile {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      padding-left: 1.5rem;
+    }
+    @media (min-width: 1024px) { .stepper-mobile { display: none; } }
+
+    .step-row { display: flex; align-items: flex-start; gap: 1rem; }
+
+    .step-m-circle {
+      flex-shrink: 0;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 3px solid var(--border);
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: hsl(215,16%,80%);
+      margin-top: 1px;
+    }
+    .step-m-circle.done   { border-color: var(--primary); background: var(--primary); color: #fff; }
+    .step-m-circle.active { border-color: var(--accent);  background: #fff;           color: var(--primary); }
+
+    .step-m-text { display: flex; flex-direction: column; min-width: 0; }
+    .step-m-num  { font-size: .7rem; font-weight: 600; color: var(--muted-fg); }
+    .step-m-name { font-size: .875rem; font-weight: 600; color: var(--muted-fg); line-height: 1.4; }
+    .step-m-name.active { color: var(--primary); font-weight: 700; }
+    .step-m-desc { font-size: .75rem; color: var(--muted-fg); }
+
+    /* ── Timeline ── */
+    .timeline-empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: .75rem;
+      padding: 3rem 1rem;
+      background: var(--secondary-bg);
+      border: 2px dashed var(--border);
+      border-radius: 1rem;
+      color: var(--muted-fg);
+      font-size: .875rem;
+      font-weight: 500;
+      text-align: center;
+    }
+
+    .timeline-list { display: flex; flex-direction: column; }
+
+    .tl-item {
+      position: relative;
+      padding: 0 0 1.5rem 2rem;
+    }
+    .tl-item:last-child { padding-bottom: 0; }
+
+    /* vertical line */
+    .tl-item:not(:last-child)::before {
+      content: '';
+      position: absolute;
+      top: 1rem;
+      left: 11px;
+      bottom: 0;
+      width: 2px;
+      background: var(--border);
+    }
+
+    /* dot */
+    .tl-dot {
+      position: absolute;
+      top: .375rem;
+      left: 0;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 4px solid #fff;
+      box-shadow: 0 0 0 1px hsla(45,100%,50%,.4);
+      z-index: 1;
+    }
+
+    .tl-card {
+      background: #fff;
+      border: 1px solid hsla(214,32%,91%,.5);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,.05);
+      transition: box-shadow .15s;
+    }
+    .tl-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,.1); }
+
+    .tl-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: .5rem;
+      margin-bottom: .5rem;
+    }
+
+    .tl-title {
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: var(--primary);
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .tl-date {
+      font-size: .75rem;
+      font-weight: 500;
+      color: var(--muted-fg);
+      background: var(--secondary-bg);
+      border-radius: 99px;
+      padding: .2rem .75rem;
+      white-space: nowrap;
+    }
+
+    .tl-msg {
+      font-size: .875rem;
+      color: hsl(215,16%,47%);
+      line-height: 1.625;
+    }
+
+    /* ── Action buttons ── */
+    .action-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: .75rem;
+    }
+    @media (min-width: 640px) {
+      .action-grid { grid-template-columns: 1fr 1fr; gap: 1rem; }
+    }
+
+    .btn-wa, .btn-ref {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+      height: 3rem;
+      border: none;
+      border-radius: var(--radius);
+      font-family: 'DM Sans', sans-serif;
+      font-size: .9rem;
+      font-weight: 600;
+      color: #fff;
+      cursor: pointer;
+      transition: filter .15s, transform .15s;
+      width: 100%;
+    }
+    @media (min-width: 640px) {
+      .btn-wa, .btn-ref { height: 4rem; font-size: 1.125rem; gap: .75rem; }
+    }
+
+    .btn-wa {
+      background: #16a34a;
+      box-shadow: 0 10px 15px -3px rgba(22,163,74,.3);
+    }
+    .btn-wa:hover { background: #15803d; transform: translateY(-1px); }
+
+    .btn-ref {
+      background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
+      box-shadow: 0 10px 15px -3px rgba(234,88,12,.3);
+    }
+    .btn-ref:hover { filter: brightness(1.07); transform: translateY(-1px); }
+
+    /* ── Footer ── */
+    .dash-footer {
+      text-align: center;
+      font-size: .75rem;
+      color: var(--muted-fg);
+      padding: 2rem 1rem;
+    }
+    @media (min-width: 640px) { .dash-footer { font-size: .875rem; } }
+
+    /* ── Spinner ── */
+    .spinner {
+      width: 18px; height: 18px;
+      border: 2px solid rgba(255,255,255,.4);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin .65s linear infinite;
+      flex-shrink: 0;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .hidden { display: none !important; }
+
+    /* ── Toast ── */
+    #toast {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      background: hsl(222,47%,11%);
+      color: #fff;
+      padding: .75rem 1.25rem;
+      border-radius: .75rem;
+      font-size: .875rem;
+      font-weight: 500;
+      box-shadow: 0 20px 25px -5px rgba(0,0,0,.2);
+      z-index: 9999;
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity .25s, transform .25s;
+      max-width: 360px;
+      pointer-events: none;
+    }
+    #toast.hide { opacity: 0; transform: translateY(6px); }
+    #toast.err  { background: hsl(0,84%,60%); }
+    #toast.ok   { background: #16a34a; }
+
+    /* ── SVG inline ── */
+    svg { display: inline-block; vertical-align: middle; flex-shrink: 0; }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════ LOGIN ════════════════════ -->
+<div id="login-page">
+  <div class="login-wrap">
+
+    <!-- Logo -->
+    <div class="login-logo">
+      <img
+        src="./logo.png"
+        alt="Confiance Energy"
+        onerror="this.style.display='none';document.getElementById('logo-txt').style.display='block'"
+      />
+      <span id="logo-txt" style="display:none" class="login-logo-text">Confiance Energy</span>
+    </div>
+
+    <div class="login-card">
+      <div class="card-bar"></div>
+
+      <div class="login-card-header">
+        <h2 class="login-card-title">Portal do Cliente</h2>
+        <p class="login-card-desc">Acompanhe o status do seu projeto em tempo real</p>
+      </div>
+
+      <div class="login-card-content">
+        <form id="login-form" style="display:flex;flex-direction:column;gap:1.5rem">
+          <div>
+            <label class="field-label" for="cpf-input">CPF</label>
+            <input
+              id="cpf-input"
+              class="cpf-input"
+              type="text"
+              inputmode="numeric"
+              placeholder="000.000.000-00"
+              maxlength="14"
+              autocomplete="off"
+            />
+          </div>
+
+          <button type="submit" id="login-btn" class="btn-login" disabled>
+            <span id="btn-label">Acessar Portal</span>
+            <!-- Arrow icon -->
+            <svg id="btn-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M5 12h14"/><path d="M12 5l7 7-7 7"/>
+            </svg>
+            <div id="btn-spinner" class="spinner hidden"></div>
+          </button>
+        </form>
+      </div>
+
+      <div class="login-card-footer">
+        Não tem seu CPF cadastrado? Entre em contato com o suporte.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════ DASHBOARD ════════════════════ -->
+<div id="dashboard-page">
+
+  <!-- Header -->
+  <header class="dash-header">
+    <div class="dash-header-inner">
+      <div class="header-left">
+        <img
+          class="header-logo-img"
+          src="./logo.png"
+          alt="Confiance Energy"
+          onerror="this.style.display='none';document.getElementById('hdr-logo-txt').style.display='block'"
+        />
+        <span id="hdr-logo-txt" style="display:none;font-family:'Outfit',sans-serif;font-weight:800;font-size:1rem;color:var(--primary)">Confiance</span>
+        <div class="header-divider"></div>
+        <span class="header-portal-title">Portal do Cliente</span>
+      </div>
+      <div class="header-right">
+        <span id="hdr-name" class="header-cname"></span>
+        <button class="btn-logout" onclick="logout()">
+          <!-- Log out icon -->
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+            <polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
+          </svg>
+          <span>Sair</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="dash-main">
+
+    <!-- Welcome + Actions -->
+    <div class="welcome-grid">
+
+      <!-- Hero card -->
+      <div class="welcome-hero">
+        <h2 id="dash-greeting" class="welcome-name">Olá!</h2>
+        <p class="welcome-sub">Bem-vindo ao seu painel. Acompanhe o progresso da sua instalação.</p>
+      </div>
+
+      <!-- Actions card -->
+      <div class="actions-card">
+        <h3 class="actions-title">
+          <!-- Download icon -->
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Ações Rápidas
+        </h3>
+        <button class="btn-contract" onclick="downloadContract()">
+          <!-- File icon -->
+          <svg class="btn-contract-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+          </svg>
+          <div>
+            <span class="btn-contract-label">Baixar Contrato</span>
+            <span class="btn-contract-sub">PDF</span>
+          </div>
+        </button>
+      </div>
+    </div>
+
+    <!-- Stepper -->
+    <div class="section-card">
+      <h3 class="section-title">Status do Projeto</h3>
+      <p class="section-sub">Acompanhe as etapas da sua instalação.</p>
+
+      <!-- desktop -->
+      <div class="stepper-desktop" id="stepper-d">
+        <div class="stepper-track">
+          <div class="stepper-track-fill" id="stepper-fill" style="width:0%"></div>
+        </div>
+      </div>
+
+      <!-- mobile -->
+      <div class="stepper-mobile" id="stepper-m"></div>
+    </div>
+
+    <!-- Timeline -->
+    <div class="section-card">
+      <h3 class="section-title">Histórico de Atualizações</h3>
+      <p class="section-sub">Todas as movimentações do seu projeto.</p>
+      <div style="max-width:48rem" id="timeline"></div>
+    </div>
+
+    <!-- CTA Buttons -->
+    <div class="action-grid">
+      <button class="btn-wa" onclick="openWhatsApp()">
+        <!-- WhatsApp SVG -->
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+        </svg>
+        Falar com o pós-vendas
+      </button>
+
+      <button class="btn-ref" onclick="openReferral()">
+        <!-- Gift icon -->
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="20 12 20 22 4 22 4 12"/>
+          <rect x="2" y="7" width="20" height="5"/>
+          <line x1="12" y1="22" x2="12" y2="7"/>
+          <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/>
+          <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
+        </svg>
+        Indique e Ganhe!
+      </button>
+    </div>
+
+    <footer class="dash-footer">
+      © <span id="yr"></span> Confiance Energy. Todos os direitos reservados.
+    </footer>
+
+  </main>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="hide"></div>
+
+<!-- ════════════════════ SCRIPT ════════════════════ -->
+<script>
+
+// ── CONFIG ─────────────────────────────────────────────────────────────────────
+// Após fazer o deploy do Apps Script, cole a URL aqui:
+const SCRIPT_URL     = 'https://script.google.com/macros/s/AKfycbwL_TJcqEW86HcCqGtjKIfDdq5OblvKSZLTI0Fv-VplvnWSDssSfS8CocYL-iFo7j9s/exec';
+const WHATSAPP_NUM   = '5584996168653';
+const MSG_SUPORTE    = 'Olá! Preciso de suporte pós-vendas.';
+const MSG_INDICACAO  = 'Olá! Gostaria de saber mais sobre o programa Indique e Ganhe da Confiance Energy!';
+
+const STEPS = [
+  { id:'Compra de equipamento',          label:'Compra',       desc:'Equipamentos sendo adquiridos',         icon:'truck'  },
+  { id:'Faturamento',                    label:'Faturamento',  desc:'Nota fiscal em processamento',          icon:'doc'    },
+  { id:'Aguardando chegada do material', label:'Transporte',   desc:'Material a caminho',                    icon:'truck'  },
+  { id:'Agendamento de instalação',      label:'Agendamento',  desc:'Definindo data da instalação',          icon:'cal'    },
+  { id:'Aguardando vistoria',            label:'Vistoria',     desc:'Aguardando inspeção técnica',           icon:'eye'    },
+  { id:'Configuração de monitoramento',  label:'Configuração', desc:'Configurando sistema de monitoramento', icon:'shield' },
+  { id:'Obra finalizada',                label:'Finalizado',   desc:'Projeto concluído com sucesso',         icon:'check'  },
+];
+
+// SVG icons for stepper
+const ICO = {
+  truck:  `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16,8 20,8 23,11 23,16 16,16"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>`,
+  doc:    `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>`,
+  cal:    `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`,
+  eye:    `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`,
+  shield: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
+  check:  `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg>`,
+  checkCircle: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>`,
+};
+
+// ── State & Init ───────────────────────────────────────────────────────────────
+let customer = null;
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+const saved = sessionStorage.getItem('ce_user');
+if (saved) {
+  try {
+    const d = JSON.parse(saved);
+    showDashboard(d.customer, d.updates);
+  } catch(_) { sessionStorage.removeItem('ce_user'); }
+}
+
+// ── CPF mask ───────────────────────────────────────────────────────────────────
+const inp = document.getElementById('cpf-input');
+const btn = document.getElementById('login-btn');
+
+inp.addEventListener('input', () => {
+  inp.value = maskCpf(inp.value);
+  btn.disabled = digits(inp.value).length !== 11;
+});
+
+function digits(v) { return v.replace(/\D/g,''); }
+function maskCpf(v) {
+  const n = digits(v).slice(0,11);
+  if (n.length <= 3) return n;
+  if (n.length <= 6) return n.slice(0,3)+'.'+n.slice(3);
+  if (n.length <= 9) return n.slice(0,3)+'.'+n.slice(3,6)+'.'+n.slice(6);
+  return n.slice(0,3)+'.'+n.slice(3,6)+'.'+n.slice(6,9)+'-'+n.slice(9);
+}
+
+// ── Login submit ───────────────────────────────────────────────────────────────
+document.getElementById('login-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const cpf = digits(inp.value);
+  if (cpf.length !== 11) return;
+
+  setLoading(true);
+  try {
+    const res  = await fetch(SCRIPT_URL + '?cpf=' + cpf);
+    const text = await res.text();
+    let data;
+    try { data = JSON.parse(text); }
+    catch(_) {
+      console.error('Resposta não-JSON do servidor:', text.substring(0, 500));
+      throw new Error('Resposta inválida do servidor (não é JSON). Veja o console para detalhes.');
+    }
+
+    if (data.error) {
+      toast(data.error === 'CPF não encontrado'
+        ? 'CPF não encontrado. Verifique e tente novamente.'
+        : data.error, 'err');
+      return;
+    }
+
+    sessionStorage.setItem('ce_user', JSON.stringify(data));
+    toast('Bem-vindo, ' + data.customer.nome.trim().split(' ')[0] + '!', 'ok');
+    showDashboard(data.customer, data.updates);
+
+  } catch(err) {
+    toast('Erro: ' + (err.message || 'Falha na conexão'), 'err');
+    console.error('Erro login:', err);
+  } finally {
+    setLoading(false);
+  }
+});
+
+function setLoading(on) {
+  btn.disabled = on;
+  document.getElementById('btn-label').textContent = on ? 'Aguarde...' : 'Acessar Portal';
+  document.getElementById('btn-arrow').classList.toggle('hidden', on);
+  document.getElementById('btn-spinner').classList.toggle('hidden', !on);
+}
+
+// ── Dashboard ──────────────────────────────────────────────────────────────────
+function showDashboard(c, updates) {
+  customer = c;
+  const first = c.nome.trim().split(' ')[0];
+
+  document.getElementById('dash-greeting').textContent = 'Olá, ' + first;
+  document.getElementById('hdr-name').textContent      = c.nome.trim();
+
+  buildStepper(c.etapa_atual);
+  buildTimeline(updates);
+
+  document.getElementById('login-page').style.display     = 'none';
+  document.getElementById('dashboard-page').style.display = 'block';
+  window.scrollTo(0, 0);
+}
+
+// ── Stepper ────────────────────────────────────────────────────────────────────
+function buildStepper(currentStep) {
+  const idx = Math.max(0, STEPS.findIndex(s => s.id === currentStep));
+
+  // ─ Desktop ─
+  const dEl  = document.getElementById('stepper-d');
+  // Keep the track bar, clear only step columns
+  dEl.querySelectorAll('.step-col').forEach(el => el.remove());
+
+  STEPS.forEach((s, i) => {
+    const done   = i < idx;
+    const active = i === idx;
+    const cls    = done ? 'done' : active ? 'active' : '';
+    const col    = document.createElement('div');
+    col.className = 'step-col';
+    col.innerHTML = `
+      <div class="step-circle ${cls}">
+        ${done ? ICO.check : i === STEPS.length-1 ? ICO.checkCircle : ICO[s.icon]}
+      </div>
+      <div class="step-lbl ${active?'active':''}">
+        ${s.label}
+        <span class="step-tooltip">${s.id}</span>
+      </div>`;
+    dEl.appendChild(col);
+  });
+
+  // Animate fill
+  const pct = idx / (STEPS.length - 1) * 100;
+  setTimeout(() => {
+    const fill = document.getElementById('stepper-fill');
+    if (fill) fill.style.width = pct + '%';
+  }, 50);
+
+  // ─ Mobile ─
+  const mEl = document.getElementById('stepper-m');
+  mEl.innerHTML = '';
+  STEPS.forEach((s, i) => {
+    const done   = i < idx;
+    const active = i === idx;
+    const cls    = done ? 'done' : active ? 'active' : '';
+    const row    = document.createElement('div');
+    row.className = 'step-row';
+    row.innerHTML = `
+      <div class="step-m-circle ${cls}">
+        ${done ? ICO.check : i === STEPS.length-1 ? ICO.checkCircle : ICO[s.icon]}
+      </div>
+      <div class="step-m-text">
+        <span class="step-m-num">Etapa ${i+1}</span>
+        <span class="step-m-name ${active?'active':''}">${s.id}</span>
+        <span class="step-m-desc">${s.desc}</span>
+      </div>`;
+    mEl.appendChild(row);
+  });
+}
+
+// ── Timeline ───────────────────────────────────────────────────────────────────
+function buildTimeline(updates) {
+  const el = document.getElementById('timeline');
+
+  if (!updates || !updates.length) {
+    el.innerHTML = `
+      <div class="timeline-empty">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="opacity:.4">
+          <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/>
+          <line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+        </svg>
+        Nenhuma atualização registrada ainda.
+      </div>`;
+    return;
+  }
+
+  const list = document.createElement('div');
+  list.className = 'timeline-list';
+
+  updates.forEach(u => {
+    const item = document.createElement('div');
+    item.className = 'tl-item';
+    item.innerHTML = `
+      <div class="tl-dot"></div>
+      <div class="tl-card">
+        <div class="tl-header">
+          <span class="tl-title">${esc(u.titulo)}</span>
+          <span class="tl-date">${esc(u.data)}</span>
+        </div>
+        <p class="tl-msg">${esc(u.mensagem)}</p>
+      </div>`;
+    list.appendChild(item);
+  });
+
+  el.innerHTML = '';
+  el.appendChild(list);
+}
+
+// ── Actions ────────────────────────────────────────────────────────────────────
+function downloadContract() {
+  if (customer?.contrato_url) {
+    window.open(customer.contrato_url, '_blank');
+  } else {
+    toast('O contrato ainda não foi anexado ao seu projeto.', 'err');
+  }
+}
+function openWhatsApp() {
+  window.open('https://wa.me/'+WHATSAPP_NUM+'?text='+encodeURIComponent(MSG_SUPORTE), '_blank');
+}
+function openReferral() {
+  window.open('https://wa.me/'+WHATSAPP_NUM+'?text='+encodeURIComponent(MSG_INDICACAO), '_blank');
+}
+function logout() {
+  sessionStorage.removeItem('ce_user');
+  customer = null;
+  inp.value = '';
+  btn.disabled = true;
+  document.getElementById('dashboard-page').style.display = 'none';
+  document.getElementById('login-page').style.display     = 'flex';
+}
+
+// ── Toast ──────────────────────────────────────────────────────────────────────
+let toastT;
+function toast(msg, type='') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = type;
+  clearTimeout(toastT);
+  toastT = setTimeout(() => el.classList.add('hide'), 3500);
+}
+
+// ── Helpers ────────────────────────────────────────────────────────────────────
+function esc(s) {
+  return String(s??'')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+</script>
+</body>
+</html>
