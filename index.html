@@ -1027,9 +1027,10 @@ function buildStepper(currentStep) {
   // Keep the track bar, clear only step columns
   dEl.querySelectorAll('.step-col').forEach(el => el.remove());
 
+  const isLast = idx === STEPS.length - 1;
   STEPS.forEach((s, i) => {
-    const done   = i < idx;
-    const active = i === idx;
+    const done   = i < idx || (isLast && i === idx);
+    const active = i === idx && !isLast;
     const cls    = done ? 'done' : active ? 'active' : '';
     const col    = document.createElement('div');
     col.className = 'step-col';
@@ -1055,8 +1056,8 @@ function buildStepper(currentStep) {
   const mEl = document.getElementById('stepper-m');
   mEl.innerHTML = '';
   STEPS.forEach((s, i) => {
-    const done   = i < idx;
-    const active = i === idx;
+    const done   = i < idx || (isLast && i === idx);
+    const active = i === idx && !isLast;
     const cls    = done ? 'done' : active ? 'active' : '';
     const row    = document.createElement('div');
     row.className = 'step-row';
