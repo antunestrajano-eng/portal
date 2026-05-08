@@ -677,6 +677,120 @@
     }
     .btn-ref:hover { filter: brightness(1.07); transform: translateY(-1px); }
 
+    /* ── FAQ ── */
+    .faq-list { display: flex; flex-direction: column; gap: .5rem; }
+
+    .faq-group-title {
+      font-size: .75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--muted-fg);
+      padding: .75rem 0 .25rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: .25rem;
+    }
+
+    .faq-item {
+      border: 1px solid var(--border);
+      border-radius: calc(var(--radius) - 2px);
+      overflow: hidden;
+      transition: border-color .15s;
+    }
+    .faq-item.open { border-color: var(--primary); }
+
+    .faq-q {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: .875rem 1rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-align: left;
+      font-family: 'DM Sans', sans-serif;
+      font-size: .875rem;
+      font-weight: 600;
+      color: var(--foreground);
+      transition: background .15s;
+    }
+    .faq-q:hover { background: var(--secondary-bg); }
+    .faq-item.open .faq-q { color: var(--primary); background: hsla(210,100%,20%,.04); }
+
+    .faq-chevron {
+      flex-shrink: 0;
+      color: var(--muted-fg);
+      transition: transform .25s;
+    }
+    .faq-item.open .faq-chevron { transform: rotate(180deg); color: var(--primary); }
+
+    .faq-a {
+      display: none;
+      padding: 0 1rem .875rem;
+      font-size: .875rem;
+      color: var(--muted-fg);
+      line-height: 1.65;
+      border-top: 1px solid var(--border);
+      padding-top: .75rem;
+    }
+    .faq-item.open .faq-a { display: block; }
+
+    /* ── Blog/Site links card ── */
+    .links-card {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--blue-900) 100%);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      box-shadow: 0 10px 15px -3px hsla(210,100%,20%,.2);
+    }
+    @media (min-width: 640px) { .links-card { border-radius: 1rem; padding: 1.5rem 2rem; } }
+
+    .links-card-text h4 {
+      font-size: .95rem;
+      color: #fff;
+      margin-bottom: .25rem;
+    }
+    @media (min-width: 640px) { .links-card-text h4 { font-size: 1.05rem; } }
+
+    .links-card-text p {
+      font-size: .8rem;
+      color: rgba(255,255,255,.75);
+    }
+
+    .links-btns { display: flex; gap: .75rem; flex-shrink: 0; }
+
+    .btn-link-outline {
+      padding: .5rem 1.1rem;
+      border: 1.5px solid rgba(255,255,255,.5);
+      border-radius: .5rem;
+      color: #fff;
+      font-weight: 600;
+      font-size: .875rem;
+      text-decoration: none;
+      transition: border-color .15s, background .15s;
+      white-space: nowrap;
+    }
+    .btn-link-outline:hover { border-color: #fff; background: rgba(255,255,255,.1); }
+
+    .btn-link-solid {
+      padding: .5rem 1.1rem;
+      background: var(--accent);
+      border-radius: .5rem;
+      color: var(--primary);
+      font-weight: 700;
+      font-size: .875rem;
+      text-decoration: none;
+      transition: filter .15s;
+      white-space: nowrap;
+    }
+    .btn-link-solid:hover { filter: brightness(1.08); }
+
     /* ── Footer ── */
     .dash-footer {
       text-align: center;
@@ -898,6 +1012,194 @@
       </button>
     </div>
 
+    <!-- Links Site + Blog -->
+    <div class="links-card">
+      <div class="links-card-text">
+        <h4>Quer entender mais sobre o seu sistema solar?</h4>
+        <p>Acesse nosso blog com dicas, informativos e novidades do setor.</p>
+      </div>
+      <div class="links-btns">
+        <a href="https://confianceenergy.com.br" target="_blank" class="btn-link-outline">Site</a>
+        <a href="https://blog.confianceenergy.com" target="_blank" class="btn-link-solid">Blog</a>
+      </div>
+    </div>
+
+    <!-- FAQ -->
+    <div class="section-card">
+      <h3 class="section-title">Perguntas Frequentes</h3>
+      <p class="section-sub">Tire suas dúvidas sobre o processo, o sistema e a economia.</p>
+
+      <div class="faq-list">
+
+        <div class="faq-group-title">Sobre o processo</div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            Quanto tempo demora para instalar?
+            <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-a">O prazo varia conforme a complexidade do projeto, disponibilidade de materiais e agenda técnica. Nossa equipe entra em contato para alinhar a melhor data assim que tudo estiver pronto.</div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            O que é homologação?
+            <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-a">É o processo de aprovação junto à concessionária de energia para que o seu sistema solar seja conectado à rede elétrica. Sem essa aprovação, o sistema não pode gerar energia de forma legal. A Confiance Energy cuida de todo esse processo por você.</div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            Por que a concessionária demora para aprovar?
+            <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-a">A concessionária tem um fluxo interno de análise que não depende da Confiance Energy. Fazemos o acompanhamento contínuo do seu processo e entramos em contato assim que houver atualização.</div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            Meu sistema já foi aprovado?
+            <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-a">Você pode acompanhar essa informação diretamente aqui no portal, na seção "Status do Projeto". Qualquer dúvida, fale com nossa equipe pelo WhatsApp.</div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            O que pode atrasar meu projeto?
+            <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-a">Os principais fatores são: pendências na documentação, disponibilidade de materiais, condições climáticas no dia da instalação e o prazo interno da concessionária para análise e aprovação. Nossa equipe trabalha para minimizar qualquer atraso e mantém você informado em cada etapa.</div>
+        </div>
+
+        <div class="faq-group-title">Sobre economia e conta de luz</div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            Quando começo a economizar na conta?
+            <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-a">A economia começa a aparecer na primeira fatura após a troca do medidor bidirecional e a aprovação da homologação pela concessionária. A partir daí, a energia gerada pelo seu sistema já é contabilizada.</div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            Minha conta vai zerar?
+            <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-a">Dificilmente vai zerar por completo. A concessionária cobra uma taxa mínima mensal independente do quanto você gera — é a chamada "taxa de disponibilidade". O que muda é que o valor da sua conta cai drasticamente, e os créditos gerados podem ser usados em meses de menor geração.</div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            Por que minha conta ainda veio alta após a instalação?
+            <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-a">Isso é normal nos primeiros meses. O sistema precisa ser homologado e o medidor bidirecional precisa ser trocado pela concessionária antes de começar a compensar. Além disso, mesmo após a aprovação, a compensação depende do ciclo de faturamento de cada cliente — o que pode fazer com que as primeiras faturas ainda não reflitam a geração do sistema.</div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            Como funciona o sistema de créditos de energia?
+            <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-a">Quando o seu sistema gera mais energia do que você consome, o excedente é injetado na rede elétrica e convertido em créditos. Esses créditos aparecem na sua fatura e podem ser usados para abater o consumo nos meses seguintes. Pela regra atual da ANEEL, os créditos têm validade de 60 meses a partir do mês em que foram gerados.</div>
+        </div>
+
+        <div class="faq-group-title">Sobre o medidor e a rede</div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            O que é o medidor bidirecional?
+            <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-a">É o medidor inteligente que a concessionária instala após a homologação. Diferente do medidor comum, ele conta tanto a energia que você consome da rede quanto a energia que o seu sistema solar injeta de volta — gerando os créditos que reduzem sua conta.</div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            Posso ligar o sistema antes da troca do medidor?
+            <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-a">Não. Ligar o sistema antes da aprovação da concessionária e da troca do medidor é irregular e pode resultar em penalidades. A Confiance Energy só autoriza o acionamento após a conclusão de todo o processo.</div>
+        </div>
+
+        <div class="faq-group-title">Sobre a instalação</div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            Preciso estar em casa no dia da instalação?
+            <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-a">Sim. É necessário que um responsável maior de idade esteja presente para acompanhar a equipe técnica e assinar os documentos de conclusão do serviço.</div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            Vou ficar sem energia durante a instalação?
+            <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-a">Haverá uma interrupção breve e pontual no fornecimento de energia durante parte da instalação, necessária para realizar as conexões elétricas com segurança. Nossa equipe avisa com antecedência o momento em que isso ocorrerá.</div>
+        </div>
+
+        <div class="faq-group-title">Sobre monitoramento e funcionamento</div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            Posso acompanhar a geração pelo celular?
+            <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-a">Sim! Todo inversor possui um aplicativo de monitoramento. O app já vem configurado pela nossa equipe — basta baixar no seu celular e acessar para acompanhar a geração em tempo real.</div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            O sistema funciona quando falta energia?
+            <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-a">Não, se o seu sistema for on-grid (conectado à rede). O inversor desliga automaticamente por segurança quando há queda de energia. Sistemas com bateria (híbridos ou off-grid) funcionam normalmente mesmo sem energia da rede.</div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            O sistema funciona em dias nublados ou chuvosos?
+            <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-a">Sim, mas com geração reduzida. Os painéis geram energia com luz difusa, mesmo sem sol direto. Em regiões com alta irradiação solar, como o Nordeste, a geração média anual costuma ser bastante consistente mesmo nos meses mais chuvosos.</div>
+        </div>
+
+        <div class="faq-group-title">Sobre manutenção e durabilidade</div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            Preciso fazer manutenção nas placas?
+            <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-a">A manutenção é simples e pouco frequente. A principal recomendação é a limpeza periódica dos módulos para remover poeira e sujeira que reduzem a eficiência. A frequência ideal varia conforme a localização e o ambiente ao redor do imóvel.</div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            Quanto tempo dura um sistema solar?
+            <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-a">Os painéis solares têm vida útil de 25 a 30 anos, com garantia de performance fornecida pelo fabricante. O inversor costuma ter vida útil entre 10 e 15 anos. Com manutenção adequada, o sistema se paga em poucos anos e continua gerando energia por décadas.</div>
+        </div>
+
+        <div class="faq-group-title">Sobre acompanhamento</div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            Como acompanho o andamento do projeto?
+            <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-a">Diretamente aqui no portal, na seção "Status do Projeto". Você também recebe atualizações da nossa equipe sempre que houver uma nova movimentação no seu processo.</div>
+        </div>
+
+      </div>
+    </div>
+
     <footer class="dash-footer">
       © <span id="yr"></span> Confiance Energy. Todos os direitos reservados.
     </footer>
@@ -938,6 +1240,16 @@ const ICO = {
   check:  `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg>`,
   checkCircle: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>`,
 };
+
+// ── FAQ ────────────────────────────────────────────────────────────────────────
+function toggleFaq(btn) {
+  const item = btn.closest('.faq-item');
+  const isOpen = item.classList.contains('open');
+  // Fecha todos
+  document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+  // Abre o clicado (se estava fechado)
+  if (!isOpen) item.classList.add('open');
+}
 
 // ── State & Init ───────────────────────────────────────────────────────────────
 let customer = null;
