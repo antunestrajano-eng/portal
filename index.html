@@ -619,16 +619,6 @@
       font-family: 'Outfit', sans-serif;
     }
 
-    .tl-date {
-      font-size: .75rem;
-      font-weight: 500;
-      color: var(--muted-fg);
-      background: var(--secondary-bg);
-      border-radius: 99px;
-      padding: .2rem .75rem;
-      white-space: nowrap;
-    }
-
     .tl-msg {
       font-size: .875rem;
       color: hsl(215,16%,47%);
@@ -1640,7 +1630,6 @@ function buildTimeline(updates) {
       <div class="tl-card">
         <div class="tl-header">
           <span class="tl-title">${esc(u.titulo)}</span>
-          <span class="tl-date">${esc(u.data)}</span>
         </div>
         <p class="tl-msg">${esc(u.mensagem)}</p>
       </div>`;
